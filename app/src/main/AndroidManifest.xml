@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ezparking.com.customview">
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".acts.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".acts.Canvas_01Activity" />
+        <activity android:name=".acts.CavasOperationActivity" />
+        <activity
+            android:name=".acts.DrawPic_bmpActivity"
+            android:hardwareAccelerated="false" />
+        <activity android:name=".acts.PatheViewActivity" />
+        <activity android:name=".acts.BeizerViewActivity" />
+        <activity android:name=".acts.BezierView2Activity" />
+        <activity android:name=".acts.WaveViewActivity" />
+        <activity android:name=".acts.IndicatorCircleActivity" />
+        <activity android:name=".acts.PathMeasureActivity" />
+        <activity android:name=".acts.MenuControlActivity" />
+        <activity android:name=".acts.FootballFieldActivity" />
+        <activity android:name=".acts.WorkMangerActivity"></activity>
+    </application>
+
+</manifest>
