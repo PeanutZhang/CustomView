@@ -30,7 +30,8 @@
         <activity android:name=".acts.PathMeasureActivity" />
         <activity android:name=".acts.MenuControlActivity" />
         <activity android:name=".acts.FootballFieldActivity" />
-        <activity android:name=".acts.WorkMangerActivity"></activity>
+        <activity android:name=".acts.WorkMangerActivity" />
+        <activity android:name=".acts.AnimationL1Activity"></activity>
     </application>
 
 </manifest>

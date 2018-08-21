@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ezparking.com.customview.acts.AnimationL1Activity">
+    <TextView
+        android:id="@+id/btn_startAniSet"
+        android:text="start animation set"
+        android:background="#f3f3f3"
+        android:padding="5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_aniSet"
+        android:background="#55ff00ff"
+        android:text="to do "
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/btn_startAniSet"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="160dp" />
+</android.support.constraint.ConstraintLayout>
