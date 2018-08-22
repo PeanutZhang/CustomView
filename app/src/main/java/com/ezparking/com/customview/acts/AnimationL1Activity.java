@@ -1,11 +1,14 @@
 package com.ezparking.com.customview.acts;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.ezparking.com.customview.R;
@@ -15,6 +18,8 @@ public class AnimationL1Activity extends AppCompatActivity implements View.OnCli
     protected TextView btnStartAniSet;
     protected TextView tvAniSet;
     private Animation animationSet;
+    private Button btnChange;
+    private ValueAnimator colorAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,7 @@ public class AnimationL1Activity extends AppCompatActivity implements View.OnCli
         if (view.getId() == R.id.btn_startAniSet) {
           tvAniSet.startAnimation(animationSet);
         }
+
     }
 
     private void initView() {
@@ -36,6 +42,24 @@ public class AnimationL1Activity extends AppCompatActivity implements View.OnCli
         tvAniSet = (TextView) findViewById(R.id.tv_aniSet);
         animationSet = AnimationUtils.loadAnimation(this, R.anim.anim_set_01);
         animationSet.setDuration(3000);
+
+       btnChange = findViewById(R.id.btn_changeColor);
+       btnChange.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               colorAnimator.start();
+           }
+       });
+        colorAnimator = ValueAnimator.ofInt(0xFFFF00FF,0x550011FF);
+        colorAnimator.setEvaluator(new ArgbEvaluator());
+        colorAnimator.setDuration(5000);
+        colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int color = (int) animation.getAnimatedValue();
+                tvAniSet.setBackgroundColor(color);
+            }
+        });
 
     }
 }

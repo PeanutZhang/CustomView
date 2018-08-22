@@ -25,4 +25,10 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_width="100dp"
         android:layout_height="160dp" />
+    <Button
+        android:id="@+id/btn_changeColor"
+        android:text="改变颜色动画"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </android.support.constraint.ConstraintLayout>

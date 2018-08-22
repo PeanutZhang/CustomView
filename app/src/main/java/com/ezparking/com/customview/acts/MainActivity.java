@@ -19,10 +19,11 @@ public class MainActivity extends AppCompatActivity {
 
     ListView lv;
     String[] titles = {"Canvas之绘制基本形状","Canvas画布操作","Canvas画图片和文字","Path初步","贝塞尔曲线","用Beizer画一个圆，和自定义View","WaveView水波效果",
-            "自定义圆指示器","PathMeasure练习","Path和Matrix绘制遥控器按钮","足球场绘制","androidx workmanger使用","动画1"};
+            "自定义圆指示器","PathMeasure练习","Path和Matrix绘制遥控器按钮","足球场绘制","androidx workmanger使用","动画1","Interpolator & Evaluate"};
     Class[] clazzs = {Canvas_01Activity.class,CavasOperationActivity.class,DrawPic_bmpActivity.class,
     PatheViewActivity.class,BeizerViewActivity.class, BezierView2Activity.class,WaveViewActivity.class,IndicatorCircleActivity.class,
-           PathMeasureActivity.class,MenuControlActivity.class,FootballFieldActivity.class,WorkMangerActivity.class,AnimationL1Activity.class
+           PathMeasureActivity.class,MenuControlActivity.class,FootballFieldActivity.class,WorkMangerActivity.class,AnimationL1Activity.class,
+            InterpolatorActivity.class
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
