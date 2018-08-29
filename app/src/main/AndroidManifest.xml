@@ -32,7 +32,9 @@
         <activity android:name=".acts.FootballFieldActivity" />
         <activity android:name=".acts.WorkMangerActivity" />
         <activity android:name=".acts.AnimationL1Activity" />
-        <activity android:name=".acts.InterpolatorActivity"></activity>
+        <activity android:name=".acts.InterpolatorActivity" />
+        <activity android:name=".acts.ValueAnimatorActivity" />
+        <activity android:name=".acts.WriteBeizerActivity"></activity>
     </application>
 
 </manifest>
