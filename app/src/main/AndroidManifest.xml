@@ -34,7 +34,8 @@
         <activity android:name=".acts.AnimationL1Activity" />
         <activity android:name=".acts.InterpolatorActivity" />
         <activity android:name=".acts.ValueAnimatorActivity" />
-        <activity android:name=".acts.WriteBeizerActivity"></activity>
+        <activity android:name=".acts.WriteBeizerActivity" />
+        <activity android:name=".acts.EffectActivity"></activity>
     </application>
 
 </manifest>

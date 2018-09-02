@@ -16,4 +16,9 @@
         android:background="#f3f3f3"
         android:layout_width="match_parent"
         android:layout_height="@dimen/qb_px_320" />
+  <com.ezparking.com.customview.views.WaveView2
+      android:id="@+id/wave2"
+      app:layout_constraintTop_toBottomOf="@id/writebezier"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/qb_px_320" />
 </android.support.constraint.ConstraintLayout>
