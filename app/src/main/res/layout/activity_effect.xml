@@ -8,8 +8,26 @@
   <Button
       android:id="@+id/satrt_"
       android:text="动起来"
+      android:shadowColor="#ff0"
+      android:shadowDx="5"
+      android:shadowDy="5"
+      android:shadowRadius="5"
+      android:layout_marginTop="@dimen/qb_px_10"
+      android:background="@drawable/layer_list_bg"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />w
+      android:layout_height="wrap_content" />
+    <TextView
+        android:text="shadow"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="@dimen/qb_px_10"
+        android:textSize="16sp"
+        android:shadowColor="#ff0"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="5"
+        app:layout_constraintLeft_toRightOf="@id/satrt_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
  <com.ezparking.com.customview.views.EffectView
      app:layout_constraintTop_toBottomOf="@id/satrt_"
      android:id="@+id/effect"

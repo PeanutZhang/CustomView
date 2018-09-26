@@ -35,7 +35,10 @@
         <activity android:name=".acts.InterpolatorActivity" />
         <activity android:name=".acts.ValueAnimatorActivity" />
         <activity android:name=".acts.WriteBeizerActivity" />
-        <activity android:name=".acts.EffectActivity"></activity>
+        <activity android:name=".acts.EffectActivity" />
+        <activity android:name=".acts.ImgXerActivity" />
+        <activity android:name=".acts.LinearCusActivity" />
+        <activity android:name=".acts.DoubleRangeBarAct"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DoubleRangeBar">
+        <attr name="rect_line_height" format="dimension"/>
+        <attr name="rect_line_normal_color" format="color"/>
+        <attr name="rect_line_selected_color" format="color"/>
+        <attr name="circle_radius_" format="dimension"/>
+        <attr name="circle_stroke_width" format="dimension" />
+        <attr name="circle_color_" format="color"/>
+        <attr name="max_value" format="integer"/>
+        <attr name="min_value" format="integer"/>
+    </declare-styleable>
+</resources>

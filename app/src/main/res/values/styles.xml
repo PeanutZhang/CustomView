@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="double_rangebar_default_value" >
+        <item name="rect_line_height">5dp</item>
+        <item name="circle_radius_">8dp</item>
+        <item name="circle_stroke_width">1dp</item>
+        <item name="rect_line_normal_color">#999999</item>
+        <item name="rect_line_selected_color">#ff00ff</item>
+        <item name="circle_color_">#2465f1</item>
+        <item name="max_value">100</item>
+        <item name="min_value">0</item>
+    </style>
+
 </resources>

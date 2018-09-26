@@ -2,6 +2,7 @@ package com.ezparking.com.customview.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,15 +36,18 @@ public class MyLinarlayout extends ViewGroup {
        int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
-           MarginLayoutParams mlp = (MarginLayoutParams) child.getLayoutParams();
-           measureChild(child,widthMeasureSpec,heightMeasureSpec);
+            measureChildWithMargins(child,widthMeasureSpec,0,heightMeasureSpec,0);
+            measureChild(child,widthMeasureSpec,heightMeasureSpec);
+            MarginLayoutParams mlp = (MarginLayoutParams) child.getLayoutParams();
            int childWidth = child.getMeasuredWidth()+mlp.leftMargin+mlp.rightMargin;
            int childHeight = child.getMeasuredHeight()+mlp.topMargin+mlp.bottomMargin;
-           childswidth += childWidth;
            childsHeight += childHeight;
+           childswidth = Math.max(childWidth,childsHeight);
         }
-        setMeasuredDimension((widthMode == MeasureSpec.EXACTLY)?width:childswidth,
+         setMeasuredDimension((widthMode == MeasureSpec.EXACTLY)?width:childswidth,
                 (heightMode == MeasureSpec.EXACTLY)?height:childsHeight);
+
+        Log.e("zyh","-----chikdCount-->  "+childCount);
 
      }
 
@@ -56,16 +60,28 @@ public class MyLinarlayout extends ViewGroup {
 
             View child = getChildAt(i);
             MarginLayoutParams mlp = (MarginLayoutParams) child.getLayoutParams();
-            int width = child.getMeasuredWidth();
+            int width = child.getMeasuredWidth()+mlp.leftMargin+mlp.rightMargin;
             int height = child.getMeasuredHeight();
-            child.layout(mlp.leftMargin,top+mlp.topMargin,width+mlp.leftMargin,height+mlp.topMargin);
-            top +=height+mlp.bottomMargin;
+            child.layout(mlp.leftMargin,top+mlp.topMargin,width,top+ height+mlp.topMargin);
+            top += height+mlp.bottomMargin;
         }
 
 
 
     }
 
+    @Override
+    protected LayoutParams generateLayoutParams(LayoutParams p) {
+        return new MarginLayoutParams(p);
+    }
 
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new MarginLayoutParams(getContext(),attrs);
+    }
 
- }
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new MarginLayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+    }
+}
