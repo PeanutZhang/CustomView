@@ -17,6 +17,9 @@
         <item name="circle_color_">#2465f1</item>
         <item name="max_value">100</item>
         <item name="min_value">0</item>
+        <item name="part_counts_">5</item>
+        <item name="descibe_space_">5dp</item>
+        <item name="bottom_text_size">15sp</item>
     </style>
 
 </resources>

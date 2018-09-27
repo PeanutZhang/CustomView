@@ -6,8 +6,11 @@
         <attr name="rect_line_selected_color" format="color"/>
         <attr name="circle_radius_" format="dimension"/>
         <attr name="circle_stroke_width" format="dimension" />
+        <attr name="descibe_space_" format="dimension"/>
         <attr name="circle_color_" format="color"/>
         <attr name="max_value" format="integer"/>
         <attr name="min_value" format="integer"/>
+        <attr name="part_counts_" format="integer"/>
+        <attr name="bottom_text_size" format="dimension"/>
     </declare-styleable>
 </resources>

@@ -95,6 +95,15 @@ public class Utils {
         return (int) (pix / densityDpi + 0.5f);
     }
 
+    /**
+     * sp转换成px
+     */
+    public static int sp2px(Context context,float spValue){
+        float fontScale=context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue*fontScale+0.5f);
+    }
+
+
 
     /**
      * 从 dimens 中获得尺寸
