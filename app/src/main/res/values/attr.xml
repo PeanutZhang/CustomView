@@ -12,5 +12,28 @@
         <attr name="min_value" format="integer"/>
         <attr name="part_counts_" format="integer"/>
         <attr name="bottom_text_size" format="dimension"/>
+        <attr name="isShowDialog" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="RangeBarView">
+        <attr name="rect_line_height1" format="dimension"/>
+        <attr name="rect_line_default_color" format="color"/>
+        <attr name="rect_line_checked_color" format="color"/>
+        <attr name="circle_radius" format="dimension"/>
+        <attr name="circle_stroke_width1" format="dimension"/>
+        <attr name="left_circle_solid_color" format="color"/>
+        <attr name="left_circle_stroke_color" format="color"/>
+        <attr name="right_circle_solid_color" format="color"/>
+        <attr name="right_circle_stroke_color" format="color"/>
+        <attr name="range_text_size" format="dimension"/>
+        <attr name="range_text_color" format="color"/>
+        <attr name="view_text_space" format="dimension"/>
+        <attr name="rect_price_desc_dialog_width" format="dimension"/>
+        <attr name="rect_price_desc_dialog_color" format="color"/>
+        <attr name="rect_price_desc_dialog_corner_radius" format="dimension"/>
+        <attr name="rect_price_desc_text_size" format="dimension"/>
+        <attr name="rect_price_desc_text_color" format="color"/>
+        <attr name="rect_price_desc_space_to_progress" format="dimension"/>
+    </declare-styleable>
+
 </resources>

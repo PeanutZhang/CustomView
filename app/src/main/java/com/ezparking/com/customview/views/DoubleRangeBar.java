@@ -6,8 +6,10 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -29,16 +31,20 @@ public class DoubleRangeBar extends View {
     private int mLineFormalColor;
     private int mLineSecletedColor;
     private int mCircleColor;
+    private int mDialogWidth=Utils.dip2px(getContext(),60);
+    private int mDialogTolineSpace = Utils.dip2px(getContext(),6);
+    private int mDialogCornerRadius= Utils.dip2px(getContext(),15);
 
 
-    private Paint mPaintFoamal,mPanitSelect, mPaintCircleleft,mPaintCircleRight,mPaintStroke,
-            mPaintBottomText,mPaintSeclect;
+
+    private Paint mPaintFoamal, mPaintCircleleft,mPaintCircleRight,mPaintStroke,
+            mPaintBottomText,mPaintSeclect,mPaintDescText;
 
 
     private int mCircleRadius, mCircleStrokeWidth;
     private int mLineCornerRadius;
     private int mRealWidth;
-    private RectF mDefaultLineRect,mSeclectRect;
+    private RectF mDefaultLineRect,mSeclectRect,mDialogRect;
 
     private CirclePoint leftCircle,rightCircle;
 
@@ -50,10 +56,26 @@ public class DoubleRangeBar extends View {
     private int bottomTextSize;
     private float mTouchX;
     private boolean isTouchLeft;
+    private boolean isShowDialogDesc;
+    private Paint mPaintDialog;
+    private String descText;
+    private int leftValue,rightValue;
+    private int perbottomTextHSpace;
 
+    private Path mPath,leftCirclePath,rightCirclePath;
+    private int triangleHeight = Utils.dip2px(getContext(),5);
+    private int triangleLength = Utils.dip2px(getContext(),6);
+    private RangeCallBack valueCallback;
+
+
+    private Region leftCircleRegion,rightCircleRegion;
 
     public DoubleRangeBar(Context context) {
         this(context,null);
+    }
+
+    public void setOnValueCallback(RangeCallBack rangeCallBack){
+        this.valueCallback = rangeCallBack;
     }
 
     public DoubleRangeBar(Context context, @Nullable AttributeSet attrs) {
@@ -101,6 +123,9 @@ public class DoubleRangeBar extends View {
                 case R.styleable.DoubleRangeBar_bottom_text_size:
                     bottomTextSize = ta.getDimensionPixelSize(attr, Utils.sp2px(context,13));
                     break;
+                case R.styleable.DoubleRangeBar_isShowDialog:
+                    isShowDialogDesc = ta.getBoolean(attr,false);
+                    break;
             }
 
         }
@@ -145,9 +170,21 @@ public class DoubleRangeBar extends View {
         mPaintSeclect.setColor(Color.parseColor("#ff00ff"));
         mPaintSeclect.setAntiAlias(true);
 
+        mPaintDialog = new Paint();
+        mPaintDialog.setStyle(Paint.Style.FILL_AND_STROKE);
+        mPaintDialog.setColor(Color.parseColor("#FF538FEF"));
+        mPaintDialog.setAntiAlias(true);
+
+        mPaintDescText = new Paint();
+        mPaintDescText.setTextSize(Utils.sp2px(context,12));
+        mPaintDescText.setTextAlign(Paint.Align.CENTER);
+        mPaintDescText.setStyle(Paint.Style.FILL_AND_STROKE);
+        mPaintDescText.setColor(Color.WHITE);
+        mPaintDescText.setAntiAlias(true);
 
         mDefaultLineRect = new RectF();
         mSeclectRect = new RectF();
+        mDialogRect = new RectF();
         mLineCornerRadius = mLineHeight/2;
 
 
@@ -155,6 +192,10 @@ public class DoubleRangeBar extends View {
         rightCircle = new CirclePoint();
 
         perNumber = maxValue/partCounts;
+        mPath = new Path();
+
+        leftCircleRegion = new Region();
+        rightCircleRegion = new Region();
 
     }
 
@@ -168,8 +209,9 @@ public class DoubleRangeBar extends View {
         int measureHeight = MeasureSpec.getSize(heightMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        int widthsize = getPaddingLeft()+getPaddingRight()+ mCircleRadius*2 + mCircleStrokeWidth *2;
-        int heightsize = getPaddingTop()+getPaddingBottom()+ mCircleRadius*2+ mCircleStrokeWidth * 2 + bottomTextSize+descrSpace;
+        int widthsize = getPaddingLeft()+getPaddingRight()+ mCircleRadius*2 + mCircleStrokeWidth *2 ;
+        int heightsize = getPaddingTop()+getPaddingBottom()+ mCircleRadius*2+ mCircleStrokeWidth * 2 + bottomTextSize+descrSpace
+                 + mDialogCornerRadius * 2 + mDialogTolineSpace ;
         int width,height;
         if(widthMode == MeasureSpec.EXACTLY){
             width = meaureWidth;
@@ -197,35 +239,71 @@ public class DoubleRangeBar extends View {
         mRealWidth = w - getPaddingLeft() - getPaddingRight();
 
         mDefaultLineRect.left = getPaddingLeft()+mCircleRadius+ mCircleStrokeWidth;
-        mDefaultLineRect.top = getPaddingTop()+mCircleRadius+ mCircleStrokeWidth -mLineCornerRadius;
+        mDefaultLineRect.top = getPaddingTop()+mCircleRadius+ mCircleStrokeWidth -mLineCornerRadius +mDialogCornerRadius * 2 + mDialogTolineSpace;
         mDefaultLineRect.right = w - getPaddingRight() - mCircleStrokeWidth - mCircleRadius;
-        mDefaultLineRect.bottom = getPaddingTop()+mLineCornerRadius+mCircleRadius+ mCircleStrokeWidth;
-
-        mSeclectRect.left= leftCircle.cx;
-        mSeclectRect.top = getPaddingTop()+mCircleStrokeWidth+mCircleRadius - mLineCornerRadius;
-        mSeclectRect.right= rightCircle.cx;
-        mSeclectRect.bottom = getPaddingTop() + mLineCornerRadius+mCircleRadius +mCircleStrokeWidth;
+        mDefaultLineRect.bottom = getPaddingTop()+mLineCornerRadius+mCircleRadius+ mCircleStrokeWidth + mDialogCornerRadius * 2 + mDialogTolineSpace;
 
         leftCircle.cx = getPaddingLeft()+ mCircleStrokeWidth +mCircleRadius;
-        leftCircle.cy = getPaddingTop()+mCircleRadius+ mCircleStrokeWidth;
+        leftCircle.cy = getPaddingTop()+mCircleRadius+ mCircleStrokeWidth+ mDialogCornerRadius * 2 + mDialogTolineSpace;
 
         rightCircle.cx = w - getPaddingRight() - mCircleRadius - mCircleStrokeWidth;
-        rightCircle.cy = getPaddingTop() + mCircleStrokeWidth + mCircleRadius;
+        rightCircle.cy = getPaddingTop() + mCircleStrokeWidth + mCircleRadius + mDialogCornerRadius * 2 + mDialogTolineSpace;
 
+        mSeclectRect.left= leftCircle.cx;
+        mSeclectRect.top = getPaddingTop()+mCircleStrokeWidth+mCircleRadius - mLineCornerRadius + mDialogCornerRadius * 2 + mDialogTolineSpace;
+        mSeclectRect.right= rightCircle.cx;
+        mSeclectRect.bottom = getPaddingTop() + mLineCornerRadius+mCircleRadius +mCircleStrokeWidth + mDialogCornerRadius * 2 + mDialogTolineSpace;
 
+        mDialogRect.left = (rightCircle.cx + leftCircle.cx)/2 - mDialogWidth/2;
+        mDialogRect.top = getPaddingTop();
+        mDialogRect.right = (rightCircle.cx + leftCircle.cx)/2 + mDialogWidth/2;
+        mDialogRect.bottom = getPaddingTop() + mDialogCornerRadius * 2 ;
 
+        perbottomTextHSpace = (mRealWidth- mCircleStrokeWidth*2 - mCircleRadius*2)/ partCounts;
 
+       leftCirclePath = new Path();
+       leftCirclePath.addCircle(leftCircle.cx,leftCircle.cy,mCircleRadius+mCircleStrokeWidth, Path.Direction.CW);
+       leftCircleRegion = createCircleRegion(leftCirclePath);
+
+       rightCirclePath = new Path();
+       rightCirclePath.addCircle(rightCircle.cx,rightCircle.cy, mCircleStrokeWidth+mCircleRadius,Path.Direction.CW);
+       leftCircleRegion = createCircleRegion(rightCirclePath);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+      Log.e("zyh","onDraw is invoked---");
      drawDefaultLineRect(canvas);
      drawSeclectRect(canvas);
      drawCircle(canvas);
      drawbottomText(canvas);
+     drawDialogDesc(canvas);
+     drawDescText(canvas);
+     drawTriangle(canvas);
+    }
 
+    private void drawDescText(Canvas canvas) {
+
+        if(!isShowDialogDesc)return;
+        if(leftValue == minValue && rightValue <= maxValue ){
+            descText = rightValue + "万以下";
+        }else if(leftValue > minValue && rightValue == maxValue){
+            descText = leftValue +"万以上";
+        }else if(leftValue>minValue && rightValue < maxValue){
+            if(leftValue == rightValue){
+
+                descText = leftValue + "万以下";
+            }else {
+                descText = leftValue+"-"+rightValue+"万";
+            }
+        }
+
+         int dX = (rightCircle.cx +leftCircle.cx)/2;
+         int centerY = getPaddingTop()+mDialogCornerRadius;
+         Paint.FontMetrics fontMetrics = mPaintDescText.getFontMetrics();
+         int baseLineY = (int) (centerY + (fontMetrics.bottom - fontMetrics.top)/2 -fontMetrics.bottom);
+         canvas.drawText(descText,dX,baseLineY,mPaintDescText);
     }
 
     private void drawSeclectRect(Canvas canvas) {
@@ -234,10 +312,8 @@ public class DoubleRangeBar extends View {
     }
 
     private void drawbottomText(Canvas canvas) {
-
-        int perbottomTextHSpace = (mRealWidth- mCircleStrokeWidth*2 - mCircleRadius*2)/ partCounts;
         int startX = getPaddingLeft()+mCircleStrokeWidth+mCircleRadius;
-        int bottomY = getPaddingTop()+(mCircleRadius+mCircleStrokeWidth)* 2 + descrSpace;
+        int bottomY = getPaddingTop()+(mCircleRadius+mCircleStrokeWidth)* 2 + descrSpace+ mDialogCornerRadius * 2 + mDialogTolineSpace;
         Log.e("zyh","---------PartCounts---->  "+partCounts+"  "+mRealWidth);
         for (int i = 0; i <= partCounts; i++) {
 
@@ -261,18 +337,31 @@ public class DoubleRangeBar extends View {
     }
 
     private void drawDefaultLineRect(Canvas canvas) {
-
         canvas.drawRoundRect(mDefaultLineRect,mLineCornerRadius,mLineCornerRadius,mPaintFoamal);
-
     }
+   private void drawDialogDesc(Canvas canvas){
+        if(isShowDialogDesc){
+            canvas.drawRoundRect(mDialogRect,mDialogCornerRadius,mDialogCornerRadius,mPaintDialog);
+        }
+   }
 
+   private void drawTriangle(Canvas canvas){
+
+       if(isShowDialogDesc){
+           mPath.reset();
+           mPath.moveTo((leftCircle.cx + rightCircle.cx)/2 - triangleLength/2,mDialogRect.bottom);
+           mPath.lineTo((leftCircle.cx + rightCircle.cx)/2,mDialogRect.bottom+triangleHeight);
+           mPath.lineTo((leftCircle.cx+rightCircle.cx)/2+triangleHeight/2,mDialogRect.bottom);
+       }
+       canvas.drawPath(mPath,mPaintDialog);
+
+   }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 Log.e("zyh","actionDown---");
-
                 mTouchX = event.getX();
                 isTouchLeft = checkIsTouchLeftCircle(mTouchX);
                 if(isTouchLeft){
@@ -283,7 +372,12 @@ public class DoubleRangeBar extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 Log.e("zyh","actionMove---");
-                 float moveX = event.getX();
+                if(isShowDialogDesc){
+                    isShowDialogDesc = true;
+                }else {
+                    isShowDialogDesc = false;
+                }
+                float moveX = event.getX();
                  if(leftCircle.cx == rightCircle.cx){//处理两圆重合时
                      if(isTouchLeft){
                          if(leftCircle.cx == getWidth() - getPaddingRight() - (mCircleStrokeWidth +mCircleRadius ) ){
@@ -313,6 +407,27 @@ public class DoubleRangeBar extends View {
                  }
 
                 break;
+            case MotionEvent.ACTION_UP:
+
+                if(isTouchLeft){
+                    int touchPerCounts = getSlicesCoordinate((int) event.getX());
+                    leftCircle.cx = (leftCircle.cx - rightCircle.cx >= 0)?rightCircle.cx : getPaddingLeft() + (mCircleStrokeWidth+ mCircleRadius) + perbottomTextHSpace * touchPerCounts;
+                }else {
+                    int touchPerCounts = getSlicesCoordinate((int) event.getX());
+                    rightCircle.cx = (rightCircle.cx - leftCircle.cx <= 0 )? leftCircle.cx :
+                             getPaddingLeft()+mCircleRadius+mCircleStrokeWidth + perbottomTextHSpace * touchPerCounts;
+                }
+
+                int leftData = getSlicesCoordinate(leftCircle.cx) * perNumber +minValue;
+                int rightData = getSlicesCoordinate(rightCircle.cx) * perNumber + minValue;
+                leftValue = leftData >= maxValue ? maxValue : leftData;
+                rightValue = rightData >= maxValue ? maxValue :rightData;
+
+                if(valueCallback !=null){
+                    valueCallback.onValueCallback(leftValue,rightValue);
+                }
+                break;
+
 
         }
 
@@ -345,8 +460,20 @@ public class DoubleRangeBar extends View {
         }
 
 
+        mSeclectRect.left = leftCircle.cx;
+        mSeclectRect.right = rightCircle.cx;
+
+        mDialogRect.left = (rightCircle.cx + leftCircle.cx)/2 - mDialogWidth/2 < getPaddingLeft()? getPaddingLeft() : (rightCircle.cx + leftCircle.cx)/2 - mDialogWidth/2;
+        mDialogRect.right = (rightCircle.cx+ leftCircle.cx)/2 + mDialogWidth/2 > getWidth() -getPaddingRight()? getWidth() - getPaddingRight():  (rightCircle.cx+ leftCircle.cx)/2 + mDialogWidth/2;
+
         postInvalidate();
         return true;
+    }
+
+    private int getSlicesCoordinate(int moveStance){
+        int parts = moveStance / perbottomTextHSpace;
+        parts = moveStance % perbottomTextHSpace  >= perbottomTextHSpace/2 ? moveStance /perbottomTextHSpace +1 : moveStance /perbottomTextHSpace;
+        return parts;
     }
 
     private boolean checkIsTouchLeftCircle(float mtouchX) {
@@ -356,4 +483,14 @@ public class DoubleRangeBar extends View {
             return true;
         }
     }
+
+    // 通过path 创建区域， 通过 region.contains(x,y)判断是否点击目标控件区域，
+    private Region createCircleRegion(Path path){
+        Region region = new Region();
+        RectF tempRectF = new RectF();
+        path.computeBounds(tempRectF,true);
+        region.setPath(path,new Region((int) tempRectF.left,(int)tempRectF.top,(int)tempRectF.right,(int)tempRectF.bottom));
+        return region;
+    }
+
 }

@@ -4,10 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ezparking.com.customview.acts.DoubleRangeBarAct">
+    <TextView
+        android:id="@+id/tv_value"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:layout_margin="@dimen/qb_px_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <com.ezparking.com.customview.views.DoubleRangeBar
+        android:id="@+id/double_rangebar"
         android:background="#e6cbcf"
+        app:isShowDialog="true"
         android:padding="@dimen/qb_px_8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.ezparking.com.customview.views.RangeBarView
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>
