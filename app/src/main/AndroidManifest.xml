@@ -38,7 +38,8 @@
         <activity android:name=".acts.EffectActivity" />
         <activity android:name=".acts.ImgXerActivity" />
         <activity android:name=".acts.LinearCusActivity" />
-        <activity android:name=".acts.DoubleRangeBarAct"></activity>
+        <activity android:name=".acts.DoubleRangeBarAct" />
+        <activity android:name=".acts.RecylerActivity"></activity>
     </application>
 
 </manifest>
